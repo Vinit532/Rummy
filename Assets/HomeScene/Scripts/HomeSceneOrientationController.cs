@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 public class HomeSceneOrientationController : MonoBehaviour
 {
-    [SerializeField] Animator animator; // Reference to the Animator component
+    [SerializeField] Animator animator; 
 
     [SerializeField] GameObject PlayButton;
 
@@ -15,7 +15,7 @@ public class HomeSceneOrientationController : MonoBehaviour
 
         if (animator != null)
         {
-            animator.SetTrigger("SplashAnimation"); // Trigger the animation by setting a parameter or calling a trigger
+            animator.SetTrigger("BoardAnimation"); // Trigger the animation by setting a parameter or calling a trigger
         }
 
         StartCoroutine(WaitForAnimation());
