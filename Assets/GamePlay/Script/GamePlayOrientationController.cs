@@ -14,7 +14,7 @@ public class GamePlayOrientationController : MonoBehaviour
 
         if (animator != null)
         {
-            animator.SetTrigger("SplashAnimation"); // Trigger the animation by setting a parameter or calling a trigger
+            animator.SetTrigger("BoardAnimation"); // Trigger the animation by setting a parameter or calling a trigger
         }
 
 

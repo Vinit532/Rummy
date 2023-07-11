@@ -5,6 +5,18 @@ public class CardScript : MonoBehaviour
     private bool isDragging = false;
     private Vector2 originalPosition;
 
+
+    private string suit;
+    private int rank;
+
+    public void SetCardData(string suit, int rank)
+    {
+        this.suit = suit;
+        this.rank = rank;
+        // Additional logic for updating the card's sprite or visual representation based on the suit and rank
+    }
+
+
     private void OnMouseDown()
     {
         originalPosition = transform.position;
@@ -24,15 +36,14 @@ public class CardScript : MonoBehaviour
     {
         isDragging = false;
 
-        // Perform raycast to detect the container where the card is dropped
+        // Perform raycast to detect the target position
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction);
 
         if (hit.collider != null)
         {
-            // Check if the collider belongs to a valid container
+            // Check if the collider belongs to a valid target position
             ContainerScript container = hit.collider.GetComponent<ContainerScript>();
-
             if (container != null)
             {
                 // Card is dropped into a valid container

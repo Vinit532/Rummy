@@ -1,54 +1,61 @@
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class CardDealer : MonoBehaviour
 {
-    public CardGenerator cardGenerator;
-    public int numberOfCardsToDeal = 13;
-    public int numberOfPlayers = 2;
-    public List<List<CardGenerator.Card>> playersCards = new List<List<CardGenerator.Card>>();
+    public Dictionary<string, GameObject> cardPrefabMapping = new Dictionary<string, GameObject>(); // Mapping of suit and rank combinations to card prefabs
+    public Transform playerHand;
+    public Transform botHand;
+    private List<GameObject> deck = new List<GameObject>();
 
     private void Start()
     {
-        cardGenerator = GetComponent<CardGenerator>();
+        GenerateDeck();
         DealCards();
     }
 
-    private void DealCards()
+    private void GenerateDeck()
     {
-        cardGenerator.GenerateDeck();
-        playersCards.Clear();
-
-        // Initialize card arrays/lists for players
-        for (int i = 0; i < numberOfPlayers; i++)
+        // Generate a deck of cards based on the cardPrefabMapping
+        foreach (var kvp in cardPrefabMapping)
         {
-            playersCards.Add(new List<CardGenerator.Card>());
-        }
+            string suit = kvp.Key.Split('_')[0]; // Extract the suit from the mapping key
+            string rankString = kvp.Key.Split('_')[1]; // Extract the rank string from the mapping key
 
-        // Deal cards to each player
-        for (int i = 0; i < numberOfCardsToDeal; i++)
-        {
-            for (int j = 0; j < numberOfPlayers; j++)
+            int rank;
+            if (int.TryParse(rankString, out rank)) // Try parsing the rank string as an integer
             {
-                CardGenerator.Card card = cardGenerator.deck[0];
-                playersCards[j].Add(card);
-                cardGenerator.deck.RemoveAt(0);
+                GameObject cardPrefab = kvp.Value;
+                GameObject card = Instantiate(cardPrefab, transform.position, Quaternion.identity);
+
+                CardScript cardScript = card.GetComponent<CardScript>();
+                cardScript.SetCardData(suit, rank);
+
+                deck.Add(card);
+            }
+            else
+            {
+                Debug.LogError("Invalid rank value: " + rankString);
             }
         }
-
-        // Call a separate method to display the player's cards on the screen
-        DisplayPlayersCards();
     }
 
-    private void DisplayPlayersCards()
+
+    private void DealCards()
     {
-        for (int i = 0; i < numberOfPlayers; i++)
+        // Deal cards to players
+        for (int i = 0; i < 13; i++)
         {
-            Debug.Log("Player " + (i + 1) + " Cards: ");
-            foreach (CardGenerator.Card card in playersCards[i])
-            {
-                Debug.Log(card.rank + " of " + card.suit);
-            }
+            // Deal a card to the player's hand
+            GameObject playerCard = deck[i];
+            playerCard.transform.parent = playerHand;
+            playerCard.transform.position = playerHand.position;
+
+            // Deal a card to the bot's hand
+            GameObject botCard = deck[i + 13];
+            botCard.transform.parent = botHand;
+            botCard.transform.position = botHand.position;
         }
     }
 }
