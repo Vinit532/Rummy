@@ -1,12 +1,12 @@
 using System.Collections.Generic;
 using UnityEngine;
-using System;
 
 public class CardDealer : MonoBehaviour
 {
-    public Dictionary<string, GameObject> cardPrefabMapping = new Dictionary<string, GameObject>(); // Mapping of suit and rank combinations to card prefabs
+    public List<CardMapping> cardMappings;
     public Transform playerHand;
     public Transform botHand;
+
     private List<GameObject> deck = new List<GameObject>();
 
     private void Start()
@@ -17,30 +17,20 @@ public class CardDealer : MonoBehaviour
 
     private void GenerateDeck()
     {
-        // Generate a deck of cards based on the cardPrefabMapping
-        foreach (var kvp in cardPrefabMapping)
+        foreach (CardMapping mapping in cardMappings)
         {
-            string suit = kvp.Key.Split('_')[0]; // Extract the suit from the mapping key
-            string rankString = kvp.Key.Split('_')[1]; // Extract the rank string from the mapping key
+            GameObject cardPrefab = mapping.cardData.cardPrefab;
+            string suit = mapping.cardData.suit;
+            int rank = mapping.cardData.rank;
 
-            int rank;
-            if (int.TryParse(rankString, out rank)) // Try parsing the rank string as an integer
-            {
-                GameObject cardPrefab = kvp.Value;
-                GameObject card = Instantiate(cardPrefab, transform.position, Quaternion.identity);
+            GameObject card = Instantiate(cardPrefab, transform.position, Quaternion.identity);
 
-                CardScript cardScript = card.GetComponent<CardScript>();
-                cardScript.SetCardData(suit, rank);
+            CardScript cardScript = card.GetComponent<CardScript>();
+            cardScript.SetCardData(suit, rank);
 
-                deck.Add(card);
-            }
-            else
-            {
-                Debug.LogError("Invalid rank value: " + rankString);
-            }
+            deck.Add(card);
         }
     }
-
 
     private void DealCards()
     {

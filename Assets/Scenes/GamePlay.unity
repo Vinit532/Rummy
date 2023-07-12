@@ -1629,6 +1629,7 @@ GameObject:
   - component: {fileID: 1497146898}
   - component: {fileID: 1497146901}
   - component: {fileID: 1497146904}
+  - component: {fileID: 1497146905}
   m_Layer: 0
   m_Name: GamePlayController
   m_TagString: Untagged
@@ -1676,6 +1677,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df83d1b8f36bbf046b245f86ac7870a0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cardMappings:
+  - {fileID: 1497146905}
   playerHand: {fileID: 1922063441}
   botHand: {fileID: 213545816}
 --- !u!114 &1497146904
@@ -1695,6 +1698,19 @@ MonoBehaviour:
   finishSlotContainer: {fileID: 2081443104}
   drawCardContainer: {fileID: 462460641}
   cardPrefab: {fileID: 214970274}
+--- !u!114 &1497146905
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1497146897}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 222455bbb6ce68343b2cd08076d9a011, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cardData: {fileID: 11400000, guid: ed493bddfda68964a8ae76d00fcfde6b, type: 2}
 --- !u!1 &1601061706
 GameObject:
   m_ObjectHideFlags: 0
