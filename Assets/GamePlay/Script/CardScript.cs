@@ -5,17 +5,15 @@ public class CardScript : MonoBehaviour
     private bool isDragging = false;
     private Vector2 originalPosition;
 
-
     private string suit;
-    private int rank;
+    private string rank;
 
-    public void SetCardData(string suit, int rank)
+    public void SetCardData(string suit, string rank)
     {
         this.suit = suit;
         this.rank = rank;
         // Additional logic for updating the card's sprite or visual representation based on the suit and rank
     }
-
 
     private void OnMouseDown()
     {

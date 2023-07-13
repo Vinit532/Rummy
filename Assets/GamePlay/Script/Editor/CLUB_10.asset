@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ccefddf0e921d0489252863f6d77d24, type: 3}
   m_Name: CLUB_10
   m_EditorClassIdentifier: 
-  suit: 
-  rank: 0
+  suit: CLUB
+  rank: 10
   cardPrefab: {fileID: 0}

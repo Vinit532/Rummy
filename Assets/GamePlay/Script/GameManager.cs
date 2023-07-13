@@ -7,6 +7,7 @@ public class GameManager : MonoBehaviour
     public ContainerScript finishSlotContainer;
     public ContainerScript drawCardContainer;
     public GameObject cardPrefab; // Add this line to define the cardPrefab
+    //internal static object instance;
 
     public void DiscardCard(GameObject card)
     {
