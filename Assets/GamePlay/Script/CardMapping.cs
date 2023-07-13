@@ -6,5 +6,6 @@ using UnityEngine;
 public class CardMapping : MonoBehaviour
 {
     public CardData cardData;
+   // public List<CardData> CardData;
 }
 

@@ -4,6 +4,6 @@ using UnityEngine;
 public class CardData : ScriptableObject
 {
     public string suit;
-    public int rank;
+    public string rank;
     public GameObject cardPrefab;
 }
