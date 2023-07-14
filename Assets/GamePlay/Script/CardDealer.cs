@@ -75,12 +75,15 @@ public class CardDealer : MonoBehaviour
         }
 
         // Deal cards to the bot's hand
+        // Deal cards to the bot's hand
         for (int i = numCardsPerHand; i < numCardsPerHand * 2; i++)
         {
             GameObject card = deck[i];
             card.transform.SetParent(botHand);
             card.transform.localPosition = Vector3.zero;
+            card.transform.localRotation = Quaternion.Euler(0, 0, 90); // Set rotation to (0, 0, 90) degrees
         }
+
 
         // Set the remaining cards' parent to the faceDownSlot
         for (int i = numCardsPerHand * 2; i < deck.Count; i++)
@@ -133,7 +136,7 @@ public class CardDealer : MonoBehaviour
     }
 
 
-    private Transform GetSuitSlot(string suit)
+  /*  private Transform GetSuitSlot(string suit)
     {
         switch (suit)
         {
@@ -149,5 +152,5 @@ public class CardDealer : MonoBehaviour
                 return null;
         }
     }
-
+  */
 }
