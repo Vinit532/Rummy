@@ -35,6 +35,7 @@ public class CardDragDrop : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
             Transform drawCardContainer = GameObject.FindGameObjectWithTag("DrawCardContainer").transform;
             cardRectTransform.SetParent(drawCardContainer);
             cardRectTransform.anchoredPosition = Vector2.zero;
+            cardRectTransform.localPosition = new Vector3(0f, 0f, 0f);
         }
         else
         {
@@ -42,6 +43,7 @@ public class CardDragDrop : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
             cardRectTransform.anchoredPosition = originalPosition;
         }
     }
+
 
     private bool IsInDrawCardContainer(Vector2 screenPosition)
     {
