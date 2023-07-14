@@ -8,8 +8,6 @@ public class CardScript : MonoBehaviour
     private string suit;
     private string rank;
 
-    private ContainerScript drawCardContainer; // Reference to the drawCardContainer object
-
     public void SetCardData(string suit, string rank)
     {
         this.suit = suit;
@@ -17,10 +15,14 @@ public class CardScript : MonoBehaviour
         // Additional logic for updating the card's sprite or visual representation based on the suit and rank
     }
 
-    private void Awake()
+    public string GetSuit()
     {
-        // Get the GameManager instance and access the drawCardContainer
-        drawCardContainer = GameManager.instance.drawCardContainer;
+        return suit;
+    }
+
+    public string GetRank()
+    {
+        return rank;
     }
 
     private void OnMouseDown()
@@ -48,15 +50,16 @@ public class CardScript : MonoBehaviour
 
         if (hit.collider != null)
         {
-            // Check if the collider belongs to the drawCardContainer object
-            if (hit.collider.gameObject == drawCardContainer.gameObject)
+            // Check if the collider belongs to a valid target position
+            ContainerScript container = hit.collider.GetComponent<ContainerScript>();
+            if (container != null)
             {
-                // Card is dropped into the drawCardContainer
-                transform.position = drawCardContainer.transform.position;
+                // Card is dropped into a valid container
+                container.AddCardToContainer(gameObject);
             }
             else
             {
-                // Card is dropped outside the drawCardContainer
+                // Card is dropped outside a valid container
                 ResetCardPosition();
             }
         }
