@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
+using System;
+
 
 public class CardDealer : MonoBehaviour
 {
@@ -50,7 +52,7 @@ public class CardDealer : MonoBehaviour
         int deckSize = deck.Count;
         for (int i = 0; i < deckSize - 1; i++)
         {
-            int randomIndex = Random.Range(i, deckSize);
+            int randomIndex = UnityEngine.Random.Range(i, deckSize);
             GameObject temp = deck[randomIndex];
             deck[randomIndex] = deck[i];
             deck[i] = temp;
@@ -91,19 +93,21 @@ public class CardDealer : MonoBehaviour
 
     public void SortCardsBySuit()
     {
-        // Sort the cards based on their suit
-        List<GameObject> sortedCards = new List<GameObject>(deck);
-        sortedCards.Sort((card1, card2) =>
+        // Get the cards from the playerHand
+        CardScript[] playerCards = playerHand.GetComponentsInChildren<CardScript>();
+
+        // Sort the player cards based on their suit
+        Array.Sort(playerCards, (card1, card2) =>
         {
-            string suit1 = card1.GetComponent<CardScript>().GetSuit();
-            string suit2 = card2.GetComponent<CardScript>().GetSuit();
+            string suit1 = card1.GetSuit();
+            string suit2 = card2.GetSuit();
             return suit1.CompareTo(suit2);
         });
 
         // Assign the sorted cards to their respective suit slots
-        foreach (GameObject card in sortedCards)
+        foreach (CardScript card in playerCards)
         {
-            string suit = card.GetComponent<CardScript>().GetSuit();
+            string suit = card.GetSuit();
             Transform suitSlot = FindSuitSlot(suit);
             if (suitSlot != null)
             {
@@ -112,6 +116,7 @@ public class CardDealer : MonoBehaviour
             }
         }
     }
+
 
     private Transform FindSuitSlot(string suit)
     {
