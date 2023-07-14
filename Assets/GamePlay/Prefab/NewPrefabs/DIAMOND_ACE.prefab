@@ -50,5 +50,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rank: DIAMOND
-  suit: 10
-  cardPrefab: {fileID: 6955874401510377237, guid: c57ae1c828b87f14385f188666f87acf, type: 3}
+  suit: ACE
+  cardPrefab: {fileID: 4556597467398754245, guid: 7a2156d6db8beb340a47b8f4d7ffb368, type: 3}

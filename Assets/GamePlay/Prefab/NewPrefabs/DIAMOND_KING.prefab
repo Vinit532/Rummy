@@ -51,4 +51,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rank: DIAMOND
   suit: KING
-  cardPrefab: {fileID: 2886270808596532809}
+  cardPrefab: {fileID: 3991480138944688299, guid: 8df0e4f871dfc5b449d4f365afa5587a, type: 3}

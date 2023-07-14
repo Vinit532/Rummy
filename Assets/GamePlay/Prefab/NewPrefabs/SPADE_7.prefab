@@ -49,6 +49,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d0a1ccb935e91c439697c67f690f782, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rank: DIAMOND
+  rank: SPADE
   suit: 7
   cardPrefab: {fileID: 6410303274548907452, guid: 6f5691c1c0f086942b2c201a1cf3c462, type: 3}

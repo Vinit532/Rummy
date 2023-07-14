@@ -51,4 +51,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rank: CLUB
   suit: 6
-  cardPrefab: {fileID: 2886270808596532809}
+  cardPrefab: {fileID: 1842072111280964550, guid: e39dbab7862903e41854607cef04ba6c, type: 3}
