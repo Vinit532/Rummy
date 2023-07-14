@@ -29,7 +29,7 @@ public class CardDealer : MonoBehaviour
     {
         foreach (CardMapping mapping in cardMappings)
         {
-            foreach (CardData cardData in mapping.cardData)
+            foreach (CardDataUI cardData in mapping.cardData)
             {
                 GameObject cardPrefab = cardData.cardPrefab;
                 string suit = cardData.suit;
