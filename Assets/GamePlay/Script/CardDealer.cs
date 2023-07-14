@@ -6,9 +6,7 @@ public class CardDealer : MonoBehaviour
     public List<CardMapping> cardMappings;
     public Transform playerHand;
     public Transform botHand;
-    public Transform drawCardContainer;
-    public Transform finishSlotContainer;
-
+    public Transform faceDownSlot;
     public Transform boardImg; // Reference to the "Board_Img" object in the scene
 
     private List<GameObject> deck = new List<GameObject>();
@@ -30,14 +28,39 @@ public class CardDealer : MonoBehaviour
                 string suit = cardData.suit;
                 string rank = cardData.rank;
 
-                GameObject card = Instantiate(cardPrefab, boardImg);
-                CardScript cardScript = card.GetComponent<CardScript>();
-                cardScript.SetCardData(suit, rank);
+                if (cardPrefab != null)
+                {
+                    GameObject card = Instantiate(cardPrefab, GetCardParent(suit));
+                    card.transform.localPosition = Vector3.zero;
 
-                card.name = $"{suit}_{rank}"; // Set the card's name
+                    CardScript cardScript = card.GetComponent<CardScript>();
+                    cardScript.SetCardData(suit, rank);
 
-                deck.Add(card);
+                    card.name = $"{suit}_{rank}"; // Set the card's name
+
+                    deck.Add(card);
+                }
+                else
+                {
+                    Debug.LogError($"CardPrefab is not assigned for card: {suit}_{rank}");
+                }
             }
+        }
+    }
+
+    private Transform GetCardParent(string suit)
+    {
+        if (suit == "Player")
+        {
+            return playerHand;
+        }
+        else if (suit == "Bot")
+        {
+            return botHand;
+        }
+        else
+        {
+            return faceDownSlot;
         }
     }
 
@@ -56,26 +79,34 @@ public class CardDealer : MonoBehaviour
 
     private void DealCards()
     {
-        // Deal cards to players
-        for (int i = 0; i < 13; i++)
-        {
-            // Deal a card to the player's hand
-            GameObject playerCard = deck[i];
-            playerCard.transform.SetParent(playerHand);
-            playerCard.transform.localPosition = Vector3.zero;
+        int numCardsPerHand = deck.Count / 4;
 
-            // Deal a card to the bot's hand
-            GameObject botCard = deck[i + 13];
-            botCard.transform.SetParent(botHand);
-            botCard.transform.localPosition = Vector3.zero;
+        // Shuffle the deck again before dealing
+        ShuffleDeck();
+
+        // Deal cards to the player's hand
+        for (int i = 0; i < numCardsPerHand; i++)
+        {
+            GameObject card = deck[i];
+            card.transform.SetParent(playerHand);
+            card.transform.localPosition = Vector3.zero;
         }
 
-        // Deal remaining cards to the draw card container
-        for (int i = 26; i < deck.Count; i++)
+        // Deal cards to the bot's hand
+        for (int i = numCardsPerHand; i < numCardsPerHand * 2; i++)
         {
-            GameObject drawCard = deck[i];
-            drawCard.transform.SetParent(finishSlotContainer);
-            drawCard.transform.localPosition = Vector3.zero;
+            GameObject card = deck[i];
+            card.transform.SetParent(botHand);
+            card.transform.localPosition = Vector3.zero;
+        }
+
+        // Set the remaining cards' parent to the faceDownSlot
+        for (int i = numCardsPerHand * 2; i < deck.Count; i++)
+        {
+            GameObject card = deck[i];
+            card.transform.SetParent(faceDownSlot);
+            card.transform.localPosition = Vector3.zero;
         }
     }
+
 }

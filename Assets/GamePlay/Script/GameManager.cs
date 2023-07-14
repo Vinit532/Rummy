@@ -2,13 +2,28 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    public static GameManager instance;
+
     public ContainerScript playerContainer;
     public ContainerScript botContainer;
     public ContainerScript finishSlotContainer;
     public ContainerScript drawCardContainer;
-    public GameObject cardPrefab; // Add this line to define the cardPrefab
-    //internal static object instance;
+    public GameObject cardPrefab;
 
+
+
+    private void Awake()
+    {
+        // Set the instance to this GameManager if it doesn't already exist
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
     public void DiscardCard(GameObject card)
     {
         // Remove the card from the player's hand or the appropriate container

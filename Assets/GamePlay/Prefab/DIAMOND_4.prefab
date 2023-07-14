@@ -12,8 +12,10 @@ GameObject:
   - component: {fileID: 9194644436210182213}
   - component: {fileID: 9194644436210182212}
   - component: {fileID: 9194644436210182214}
-  - component: {fileID: 9194644436210182215}
   - component: {fileID: 9194644436210182216}
+  - component: {fileID: 9194644436210182215}
+  - component: {fileID: -899244596355786418}
+  - component: {fileID: 3782249687633137203}
   m_Layer: 5
   m_Name: DIAMOND_4
   m_TagString: Untagged
@@ -89,7 +91,7 @@ BoxCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -105,18 +107,6 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 30, y: 50}
   m_EdgeRadius: 0
---- !u!114 &9194644436210182215
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9194644436210182210}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e129aea7c784c014fadefe695f1bc696, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &9194644436210182216
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -129,3 +119,48 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 977c209d60a8bde489fa6a65da85d564, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &9194644436210182215
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9194644436210182210}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e129aea7c784c014fadefe695f1bc696, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!50 &-899244596355786418
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9194644436210182210}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
+--- !u!225 &3782249687633137203
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9194644436210182210}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0

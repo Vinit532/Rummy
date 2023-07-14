@@ -1,58 +1,70 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 
-public class CardDragDrop : MonoBehaviour
+public class CardDragDrop : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
-    private bool isDragging = false;
+    private RectTransform cardRectTransform;
+    private CanvasGroup canvasGroup;
     private Vector2 originalPosition;
+    private Transform originalParent;
 
-    private void OnMouseDown()
+    private void Awake()
     {
-        originalPosition = transform.position;
-        isDragging = true;
+        cardRectTransform = GetComponent<RectTransform>();
+        canvasGroup = GetComponent<CanvasGroup>();
     }
 
-    private void OnMouseDrag()
+    public void OnBeginDrag(PointerEventData eventData)
     {
-        if (isDragging)
-        {
-            Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            transform.position = new Vector3(mousePosition.x, mousePosition.y, transform.position.z);
-        }
+        originalPosition = cardRectTransform.anchoredPosition;
+        originalParent = transform.parent;
+        canvasGroup.blocksRaycasts = false;
     }
 
-    private void OnMouseUp()
+    public void OnDrag(PointerEventData eventData)
     {
-        isDragging = false;
+        cardRectTransform.anchoredPosition += eventData.delta / GetCanvasScale();
+    }
 
-        // Perform raycast to detect the target position
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction);
+    public void OnEndDrag(PointerEventData eventData)
+    {
+        canvasGroup.blocksRaycasts = true;
 
-        if (hit.collider != null)
+        if (IsInDrawCardContainer(eventData.position))
         {
-            // Check if the collider belongs to a valid target position
-            ContainerScript container = hit.collider.GetComponent<ContainerScript>();
-            if (container != null)
-            {
-                // Card is dropped into a valid container
-                container.AddCardToContainer(gameObject);
-            }
-            else
-            {
-                // Card is dropped outside a valid container
-                ResetCardPosition();
-            }
+            Transform drawCardContainer = GameObject.FindGameObjectWithTag("DrawCardContainer").transform;
+            cardRectTransform.SetParent(drawCardContainer);
+            cardRectTransform.anchoredPosition = Vector2.zero;
         }
         else
         {
-            // Card is dropped outside any collider
-            ResetCardPosition();
+            cardRectTransform.SetParent(originalParent);
+            cardRectTransform.anchoredPosition = originalPosition;
         }
     }
 
-    private void ResetCardPosition()
+    private bool IsInDrawCardContainer(Vector2 screenPosition)
     {
-        // Reset the card position to its original position
-        transform.position = originalPosition;
+        RectTransform drawCardContainerRectTransform = GameObject.FindGameObjectWithTag("DrawCardContainer").GetComponent<RectTransform>();
+        if (drawCardContainerRectTransform != null)
+        {
+            Vector2 localPosition;
+            if (RectTransformUtility.ScreenPointToLocalPointInRectangle(drawCardContainerRectTransform, screenPosition, null, out localPosition))
+            {
+                Rect drawCardContainerRect = drawCardContainerRectTransform.rect;
+                return drawCardContainerRect.Contains(localPosition);
+            }
+        }
+        return false;
+    }
+
+    private float GetCanvasScale()
+    {
+        Canvas canvas = GetComponentInParent<Canvas>();
+        if (canvas != null)
+        {
+            return canvas.scaleFactor;
+        }
+        return 1f;
     }
 }
