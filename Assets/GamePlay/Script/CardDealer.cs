@@ -8,7 +8,8 @@ public class CardDealer : MonoBehaviour
     public Transform botHand;
     public Transform drawCardContainer;
     public Transform finishSlotContainer;
-    public Transform faceDownSlot; // Reference to the "Face Down" slot
+
+    public Transform boardImg; // Reference to the "Board_Img" object in the scene
 
     private List<GameObject> deck = new List<GameObject>();
 
@@ -29,7 +30,7 @@ public class CardDealer : MonoBehaviour
                 string suit = cardData.suit;
                 string rank = cardData.rank;
 
-                GameObject card = Instantiate(cardPrefab, transform.position, Quaternion.identity);
+                GameObject card = Instantiate(cardPrefab, boardImg);
                 CardScript cardScript = card.GetComponent<CardScript>();
                 cardScript.SetCardData(suit, rank);
 
@@ -69,12 +70,12 @@ public class CardDealer : MonoBehaviour
             botCard.transform.localPosition = Vector3.zero;
         }
 
-        // Deal remaining cards to the face down slot
+        // Deal remaining cards to the draw card container
         for (int i = 26; i < deck.Count; i++)
         {
-            GameObject faceDownCard = deck[i];
-            faceDownCard.transform.SetParent(faceDownSlot);
-            faceDownCard.transform.localPosition = Vector3.zero;
+            GameObject drawCard = deck[i];
+            drawCard.transform.SetParent(finishSlotContainer);
+            drawCard.transform.localPosition = Vector3.zero;
         }
     }
 }
