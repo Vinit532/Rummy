@@ -1,7 +1,5 @@
 using System.Collections.Generic;
 using UnityEngine;
-using System;
-
 
 public class CardDealer : MonoBehaviour
 {
@@ -23,6 +21,7 @@ public class CardDealer : MonoBehaviour
         GenerateDeck();
         ShuffleDeck();
         DealCards();
+       // SortCardsBySuit();
     }
 
     private void GenerateDeck()
@@ -35,11 +34,11 @@ public class CardDealer : MonoBehaviour
                 string suit = cardData.suit;
                 string rank = cardData.rank;
 
-                GameObject card = Instantiate(cardPrefab, playerHand);
+                GameObject card = Instantiate(cardPrefab, faceDownSlot);
                 CardScript cardScript = card.GetComponent<CardScript>();
                 cardScript.SetCardData(suit, rank);
 
-                card.name = $"{suit}_{rank}"; // Set the card's name
+                card.name = $"{rank}_{suit}";
 
                 deck.Add(card);
             }
@@ -52,7 +51,7 @@ public class CardDealer : MonoBehaviour
         int deckSize = deck.Count;
         for (int i = 0; i < deckSize - 1; i++)
         {
-            int randomIndex = UnityEngine.Random.Range(i, deckSize);
+            int randomIndex = Random.Range(i, deckSize);
             GameObject temp = deck[randomIndex];
             deck[randomIndex] = deck[i];
             deck[i] = temp;
@@ -75,7 +74,6 @@ public class CardDealer : MonoBehaviour
         }
 
         // Deal cards to the bot's hand
-        // Deal cards to the bot's hand
         for (int i = numCardsPerHand; i < numCardsPerHand * 2; i++)
         {
             GameObject card = deck[i];
@@ -83,7 +81,6 @@ public class CardDealer : MonoBehaviour
             card.transform.localPosition = Vector3.zero;
             card.transform.localRotation = Quaternion.Euler(0, 0, 90); // Set rotation to (0, 0, 90) degrees
         }
-
 
         // Set the remaining cards' parent to the faceDownSlot
         for (int i = numCardsPerHand * 2; i < deck.Count; i++)
@@ -99,58 +96,73 @@ public class CardDealer : MonoBehaviour
         // Get the cards from the playerHand
         CardScript[] playerCards = playerHand.GetComponentsInChildren<CardScript>();
 
-        // Sort the player cards based on their suit
-        Array.Sort(playerCards, (card1, card2) =>
-        {
-            string suit1 = card1.GetSuit();
-            string suit2 = card2.GetSuit();
-            return suit1.CompareTo(suit2);
-        });
+        // Create a dictionary to store the cards for each suit
+        Dictionary<string, List<CardScript>> suitCards = new Dictionary<string, List<CardScript>>();
 
-        // Assign the sorted cards to their respective suit slots
+        // Initialize the dictionary with empty lists for each suit
+        suitCards.Add("HEART", new List<CardScript>());
+        suitCards.Add("CLUB", new List<CardScript>());
+        suitCards.Add("SPADE", new List<CardScript>());
+        suitCards.Add("DIAMOND", new List<CardScript>());
+        
+       
+
+        // Sort the player cards into their respective suit lists
         foreach (CardScript card in playerCards)
         {
-            string suit = card.GetSuit();
-            Transform suitSlot = FindSuitSlot(suit);
+            string suit = card.GetSuit().ToUpper(); // Convert the suit to uppercase
+            if (suitCards.ContainsKey(suit))
+            {
+                Debug.Log("Suit: " + suit + ", Card Suit: " + card.Suit);
+
+                suitCards[suit].Add(card);
+            }
+            else
+            {
+                Debug.LogError("Suit slot not found for suit: " + suit);
+            }
+        }
+
+        // Move the sorted cards to their respective suit slots
+        foreach (KeyValuePair<string, List<CardScript>> pair in suitCards)
+        {
+            string suit = pair.Key;
+            List<CardScript> cards = pair.Value;
+
+            Transform suitSlot = GetSuitSlot(suit);
             if (suitSlot != null)
             {
-                card.transform.SetParent(suitSlot);
-                card.transform.localPosition = Vector3.zero;
+                foreach (CardScript card in cards)
+                {
+                    card.transform.SetParent(suitSlot);
+                    card.transform.localPosition = Vector3.zero;
+                }
             }
         }
-    }
 
-
-    private Transform FindSuitSlot(string suit)
-    {
-        // Find the suit slot based on the suit name
-        Transform[] suitSlots = new Transform[] { diamondSuitSlot, clubsSuitSlot, spadeSuitSlot, heartSuitSlot };
-        foreach (Transform slot in suitSlots)
+        // Debug message after sorting cards
+        Debug.Log("After sorting player hand:");
+        foreach (CardScript card in playerCards)
         {
-            if (slot.name.ToLower().Contains(suit.ToLower()))
-            {
-                return slot;
-            }
-        }
-        return null;
-    }
-
-
-  /*  private Transform GetSuitSlot(string suit)
-    {
-        switch (suit)
-        {
-            case "Diamond":
-                return diamondSuitSlot;
-            case "Clubs":
-                return clubsSuitSlot;
-            case "Spade":
-                return spadeSuitSlot;
-            case "Heart":
-                return heartSuitSlot;
-            default:
-                return null;
+            Debug.Log($"{card.name} - Suit: {card.GetSuit()}, Rank: {card.GetRank()}");
         }
     }
-  */
+
+
+
+
+
+    private Transform GetSuitSlot(string suit)
+    {
+        if (suit.Equals("HEART"))
+            return heartSuitSlot;
+        else if (suit.Equals("DIAMOND"))
+            return diamondSuitSlot;
+        else if (suit.Equals("CLUB"))
+            return clubsSuitSlot;
+        else if (suit.Equals("SPADE"))
+            return spadeSuitSlot;
+        else
+            return null;
+    }
 }
