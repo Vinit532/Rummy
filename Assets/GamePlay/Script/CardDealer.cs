@@ -91,30 +91,42 @@ public class CardDealer : MonoBehaviour
 
     public void SortCardsBySuit()
     {
-        // Get the cards in the player's hand
-        List<GameObject> playerCards = new List<GameObject>();
-        foreach (Transform card in playerHand)
-        {
-            playerCards.Add(card.gameObject);
-        }
-
-        // Sort the cards in the player's hand based on their suit
-        playerCards.Sort((card1, card2) =>
+        // Sort the cards based on their suit
+        List<GameObject> sortedCards = new List<GameObject>(deck);
+        sortedCards.Sort((card1, card2) =>
         {
             string suit1 = card1.GetComponent<CardScript>().GetSuit();
             string suit2 = card2.GetComponent<CardScript>().GetSuit();
             return suit1.CompareTo(suit2);
         });
 
-        // Move the sorted cards to their respective suit slots
-        foreach (GameObject card in playerCards)
+        // Assign the sorted cards to their respective suit slots
+        foreach (GameObject card in sortedCards)
         {
             string suit = card.GetComponent<CardScript>().GetSuit();
-            Transform suitSlot = GetSuitSlot(suit);
-            card.transform.SetParent(suitSlot);
-            card.transform.localPosition = Vector3.zero;
+            Transform suitSlot = FindSuitSlot(suit);
+            if (suitSlot != null)
+            {
+                card.transform.SetParent(suitSlot);
+                card.transform.localPosition = Vector3.zero;
+            }
         }
     }
+
+    private Transform FindSuitSlot(string suit)
+    {
+        // Find the suit slot based on the suit name
+        Transform[] suitSlots = new Transform[] { diamondSuitSlot, clubsSuitSlot, spadeSuitSlot, heartSuitSlot };
+        foreach (Transform slot in suitSlots)
+        {
+            if (slot.name.ToLower().Contains(suit.ToLower()))
+            {
+                return slot;
+            }
+        }
+        return null;
+    }
+
 
     private Transform GetSuitSlot(string suit)
     {
